@@ -1,0 +1,21 @@
+Q1: How do you run migration?
+(Select multi choices)
+
+A. rails db:migrate !!!Correct
+B. rake db:migrate !!!Correct
+C. rake db:migration
+D. rails db:migration
+
+
+Q2: How to access console log screen in rails? (multi choices)
+
+A. rails console !!!Correct
+B. rake c !!!Correct
+C. rake console --sandbox !!!Correct
+D. rails c --sandbox !!!Correct
+
+Q3: What is the purpose of using div tags in HTML?
+A. For creating Different styles.
+B. For creating different sections. !!!Correct
+C. For adding headings.
+D. For adding titles.
