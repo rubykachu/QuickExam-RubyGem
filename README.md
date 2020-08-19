@@ -22,7 +22,13 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Return original data with format JSON
+
+    $ quick_exam analyze --path=path_file --shuffle_question=true --shuffle_answers=true --count=4
+
+Generate file
+
+    $ quick_exam export --path=path_file --shuffle_question=true --shuffle_answers=true --count=4
 
 ## Development
 

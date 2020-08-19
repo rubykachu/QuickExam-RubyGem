@@ -3,12 +3,21 @@
 require "bundler/setup"
 require "quick_exam"
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+def reload!(print = true)
+  puts 'Reloading ...' if print
+  root_dir = File.expand_path('..', __dir__)
+  reload_dirs = %w{lib}
+  Object.send(:remove_const, :"QuickExam")
+  reload_dirs.each do |dir|
+    Dir.glob("#{root_dir}/#{dir}/**/*.rb").each { |f| load(f) }
+  end
+  true
+end
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
-
-require "irb"
-IRB.start(__FILE__)
+begin
+  require 'pry'
+  Pry.start
+rescue LoadError
+  require "irb"
+  IRB.start(__FILE__)
+end
