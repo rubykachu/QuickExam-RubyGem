@@ -52,21 +52,16 @@ module QuickExam
         if !object[:question].empty?
           if answer?(line)
             # Get answer
-            if correct_answer?(line)
-              line.slice!(CORRECT_MARK)
-              object[:answers] << line
-              # Specific correct answer
-              object[:correct_index] << object[:answers].size - 1 # Index start is 0
-            else
-              object[:answers] << line
-            end
+            object[:answers] << split_answer_from_mark_correct(line)
+
+            # Get index correct
+            object[:correct_index] << object[:answers].size - 1 if correct_answer?(line)
           else
             # Chain question
             object[:question] += line
           end
         end
       end
-      binding.pry
       file.close
     end
 
@@ -86,6 +81,13 @@ module QuickExam
     def answer?(str)
       str = rid_non_ascii!(str)
       !str[(/(?<=^\w\.).*/ix)].to_s.empty?
+    end
+
+    # ?= : positive lookahead
+    def split_answer_from_mark_correct(str)
+      str[(/^(\w).*(?=#{CORRECT_MARK})/i)].strip
+    rescue
+      str
     end
 
     def correct_answer?(str)
