@@ -1,5 +1,6 @@
 require "quick_exam/version"
-require "quick_exam/default"
+require "quick_exam/core_ext"
+require "quick_exam/analyzer"
 
 # Sample data
 # [
@@ -100,7 +101,6 @@ module QuickExam
       num_row == @total_line
     end
 
-    # Should define in class String
     # Ref: https://stackoverflow.com/a/26411802/14126700
     # Ref: https://www.regular-expressions.info/posixbrackets.html
     # [:print:] : Visible characters and spaces (anything except control characters)
