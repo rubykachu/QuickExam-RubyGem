@@ -1,4 +1,7 @@
-require_relative 'lib/quick_exam/version'
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'quick_exam/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "quick_exam"
@@ -9,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Shuffle quickly questions and answers"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/tm-minhtang/quick_exam.git"
+  spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org/"

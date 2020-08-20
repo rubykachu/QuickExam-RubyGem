@@ -1,5 +1,5 @@
-# require "quick_exam/version"
-require 'pry'
+require "quick_exam/version"
+require "quick_exam/default"
 
 # Sample data
 # [
@@ -63,6 +63,7 @@ module QuickExam
         end
       end
       file.close
+      data
     end
 
     # TODO: Regex question
