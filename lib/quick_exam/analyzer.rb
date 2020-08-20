@@ -1,4 +1,5 @@
 require 'quick_exam/const'
+require 'quick_exam/record'
 require 'quick_exam/record_collection'
 
 module QuickExam
@@ -34,7 +35,7 @@ module QuickExam
     end
 
     def data_standardize
-      @object = { question: '', answers: [], correct_index: [] }
+      @object = QuickExam::Record.new()
 
       file.each_line.with_index do |line, num_row|
         num_row += 1 # The first row is 1
@@ -51,26 +52,26 @@ module QuickExam
     end
 
     def get_question
-      return if object[:answers].__present?
-      object[:question] += line
+      return if object.answers.__present?
+      object.question += line
     end
 
     def get_answer
-      return if object[:question].__blank?
+      return if object.question.__blank?
       return unless answer?(line)
 
       # Get answer
-      object[:answers] << split_answer_from_mark_correct(line)
+      object.answers << split_answer_from_mark_correct(line)
       get_correct_index_answer
     end
 
     def get_correct_index_answer
       return unless correct_answer?(line)
-      object[:correct_index] << object[:answers].size - 1
+      object.correct_index << object.answers.size - 1
     end
 
     def end_of_one_ticket?
-      object[:answers].__present? && object[:question].__present? && question?(line)
+      object.answers.__present? && object.question.__present? && question?(line)
     end
 
     def collect_object_ticket
@@ -79,7 +80,7 @@ module QuickExam
     end
 
     def reset_object_ticket
-      @object = { question: '', answers: [], correct_index: [] }
+      @object = QuickExam::Record.new()
     end
 
     # TODO: Regex question

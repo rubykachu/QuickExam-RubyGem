@@ -1,5 +1,5 @@
 module QuickExam
-  class Record < Hash
+  class Record
     attr_accessor :question, :answers, :correct_index
 
     def initialize(question: '', answers: [], correct_index: [])
