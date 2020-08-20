@@ -1,28 +1,33 @@
 require 'quick_exam/const'
+require 'quick_exam/record_collection'
 
 module QuickExam
   class Analyzer
     include QuickExam::Const
-    attr_reader :data
+    attr_reader :records, :total_line, :file
 
     def initialize(path_file)
       @path_file = path_file
-      @data = []
+      @records = QuickExam::RecordCollection.new()
     end
 
     def self.run(path_file)
-      QuickExam::Analyzer.new(path_file).analyze
+      tool = QuickExam::Analyzer.new(path_file)
+      tool.analyze
+      tool
     end
 
     def analyze
       raise IOError.new 'File does not exist or is unreadable' unless File.exists? path_file
       open_file!
       data_standardize
+      protect_instance_variable
+      records
     end
 
     private
 
-    attr_reader :file, :path_file, :object, :line
+    attr_reader :path_file, :object, :line
 
     def open_file!
       @file = File.open(path_file, 'r')
@@ -42,7 +47,7 @@ module QuickExam
         next if get_answer
         next if get_question
       end
-      data
+      records
     end
 
     def get_question
@@ -69,7 +74,7 @@ module QuickExam
     end
 
     def collect_object_ticket
-      data << object
+      records << object
       reset_object_ticket
     end
 
@@ -114,7 +119,7 @@ module QuickExam
 
     def end_of_line?(num_row)
       @total_line ||= `wc -l "#{file.path}"`.strip.split(' ')[0].to_i
-      num_row == @total_line
+      num_row == total_line
     end
 
     # TODO: Remove non-unicode character
@@ -128,6 +133,12 @@ module QuickExam
       return str if non_utf8 == "\n" || non_utf8 == "\t"
       str.slice!(str[/[^[:print:]]/])
       str
+    end
+
+    def protect_instance_variable
+      remove_instance_variable(:@object)
+      remove_instance_variable(:@line)
+      remove_instance_variable(:@path_file)
     end
   end
 end
