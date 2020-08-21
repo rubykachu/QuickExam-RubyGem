@@ -62,12 +62,12 @@ module QuickExam
 
       # Get answer
       object.answers << split_answer_from_mark_correct(line)
-      get_correct_index_answer
+      get_correct_indexes_answer
     end
 
-    def get_correct_index_answer
+    def get_correct_indexes_answer
       return unless correct_answer?(line)
-      object.correct_index << object.answers.size - 1
+      object.correct_indexes << object.answers.size - 1
     end
 
     def end_of_one_ticket?
