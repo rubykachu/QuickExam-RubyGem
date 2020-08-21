@@ -11,7 +11,7 @@ module QuickExam
       return records if count.zero?
       count.times.each_with_object([]) do |_, memo|
         new_records = records.dup
-        new_records.shuffle!(random: Random.new(10)) if shuffle_question
+        new_records.shuffle! if shuffle_question
         shuffle_answers(new_records) if shuffle_answer
         memo << new_records
       end

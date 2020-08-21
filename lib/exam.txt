@@ -16,7 +16,9 @@ D. rails c --sandbox !!!Correct
 
 Q3: What is the purpose of using div tags in HTML?
 
-A. For creating different styles.
+A. For creating
+
+different styles.
 B. For creating different sections. !!!Correct
 C. For adding headings.
 D. For adding titles.

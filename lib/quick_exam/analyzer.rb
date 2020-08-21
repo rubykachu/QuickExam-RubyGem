@@ -3,6 +3,8 @@ require 'quick_exam/record'
 require 'quick_exam/record_collection'
 
 module QuickExam
+  class ErrorAnalyzer < StandardError; end
+
   class Analyzer
     include QuickExam::Const
     attr_reader :records, :total_line, :file
@@ -16,6 +18,8 @@ module QuickExam
       tool = QuickExam::Analyzer.new(path_file)
       tool.analyze
       tool
+    rescue => e
+      raise ErrorAnalyzer.new('Data can not analyze')
     end
 
     def analyze
@@ -24,6 +28,8 @@ module QuickExam
       data_standardize
       protect_instance_variable
       records
+    rescue => e
+      raise ErrorAnalyzer.new('Data can not analyze')
     end
 
     private
@@ -56,7 +62,7 @@ module QuickExam
 
     def get_question
       return if object.answers.__present?
-      object.question += line
+      object.question += question(line)
     end
 
     def get_answer
@@ -64,7 +70,7 @@ module QuickExam
       return unless answer?(line)
 
       # Get answer
-      object.answers << split_answer_from_mark_correct(line)
+      object.answers << answer(line)
       get_correct_indexes_answer
     end
 
@@ -78,8 +84,14 @@ module QuickExam
     end
 
     def collect_object_ticket
-      records << object
+      records << clean_object
       reset_object_ticket
+    end
+
+    def clean_object
+      object.question.strip!
+      object.answers.map{ |ans| ans.strip! }
+      object
     end
 
     def reset_object_ticket
@@ -100,7 +112,6 @@ module QuickExam
     # TODO: Regex answer
     # Format answer: A. , B. , C. , D.
     # i: case insensitive
-    # m: make dot match newlines
     # x: ignore whitespace in regex
     # ?<= : positive lookbehind
     def answer?(str)
@@ -108,13 +119,22 @@ module QuickExam
       !str[(/(?<=^\w\.).*/ix)].to_s.empty?
     end
 
-    # TODO: Regex correct answer
+    # TODO: Regex get clean answer
     # i: case insensitive
+    # ?<= : positive lookbehind
     # ?= : positive lookahead
-    def split_answer_from_mark_correct(str)
-      str[(/^(\w).*(?=#{CORRECT_MARK})/i)].strip
-    rescue
-      str
+    def answer(str)
+      ans_with_mark_correct = /((?<=^\w\.).*(?=!!!Correct))/
+      ans_without_mark_correct = /(?<=^\w\.).*/
+      str[(/#{ans_with_mark_correct}|#{ans_without_mark_correct}/ix)].__presence || str
+    end
+
+    # TODO: Regex get clean question
+    # i: case insensitive
+    # m: make dot match newlines
+    # ?<= : positive lookbehind
+    def question(str)
+      str[(/(?<=#{QUESTION_MARK}.:).*/im)].__presence || str
     end
 
     def correct_answer?(str)
