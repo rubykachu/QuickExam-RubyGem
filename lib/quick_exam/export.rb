@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'quick_exam/const'
 
 module QuickExam
@@ -21,9 +22,9 @@ module QuickExam
 
       def check_path(dest_path, file_path)
         if dest_path.__blank?
-          @dest = File.dirname(file_path) + '/quick_exam/'
+          @dest = File.dirname(file_path) + '/quick_exam_export/'
         else
-          @dest = dest_path + '/quick_exam/'
+          @dest = dest_path + '/quick_exam_export/'
         end
 
         return raise ErrorExport.new('No such file') unless File.exist?(file_path)
