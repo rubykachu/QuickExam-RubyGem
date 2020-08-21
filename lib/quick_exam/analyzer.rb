@@ -41,7 +41,10 @@ module QuickExam
         num_row += 1 # The first row is 1
         @line = line
 
-        collect_object_ticket if end_of_line?(num_row) || end_of_one_ticket?
+        if end_of_line?(num_row) || end_of_one_ticket_for_next_question?
+          get_answer # if the last line is answer then will get answer
+          collect_object_ticket
+        end
 
         next if line.__blank?
 
@@ -70,7 +73,7 @@ module QuickExam
       object.correct_indexes << object.answers.size - 1
     end
 
-    def end_of_one_ticket?
+    def end_of_one_ticket_for_next_question?
       object.answers.__present? && object.question.__present? && question?(line)
     end
 
