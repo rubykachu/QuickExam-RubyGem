@@ -28,7 +28,7 @@ Return original data with format JSON
 
 Generate file
 
-    $ quick_exam export --path=path_file --shuffle_question=true --shuffle_answers=true --count=4
+    $ quick_exam export --path=path_file --shuffle_question=true --shuffle_answers=true --count=4 --dest="./folder"
 
 ## Development
 

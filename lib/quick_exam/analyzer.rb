@@ -3,41 +3,42 @@ require 'quick_exam/record'
 require 'quick_exam/record_collection'
 
 module QuickExam
-  class ErrorAnalyzer < StandardError; end
+  class ErrorAnalyze < StandardError; end
 
   class Analyzer
     include QuickExam::Const
     attr_reader :records, :total_line, :file
 
-    def initialize(path_file)
-      @path_file = path_file
+    def initialize(file_path)
+      raise ErrorAnalyze.new('No such file') unless File.exist? file_path
+      @file_path = file_path
       @records = QuickExam::RecordCollection.new()
     end
 
-    def self.run(path_file)
-      tool = QuickExam::Analyzer.new(path_file)
+    def self.run(file_path)
+      tool = QuickExam::Analyzer.new(file_path)
       tool.analyze
       tool
     rescue => e
-      raise ErrorAnalyzer.new('Data can not analyze')
+      raise ErrorAnalyze.new('Data can not analyze')
     end
 
     def analyze
-      raise IOError.new 'File does not exist or is unreadable' unless File.exists? path_file
+      raise IOError.new 'File does not exist or is unreadable' unless File.exists? file_path
       open_file!
       data_standardize
       protect_instance_variable
       records
     rescue => e
-      raise ErrorAnalyzer.new('Data can not analyze')
+      raise ErrorAnalyze.new('Data can not analyze')
     end
 
     private
 
-    attr_reader :path_file, :object, :line
+    attr_reader :file_path, :object, :line
 
     def open_file!
-      @file = File.open(path_file, 'r')
+      @file = File.open(file_path, 'r')
     end
 
     def data_standardize
@@ -162,7 +163,7 @@ module QuickExam
     def protect_instance_variable
       remove_instance_variable(:@object)
       remove_instance_variable(:@line)
-      remove_instance_variable(:@path_file)
+      remove_instance_variable(:@file_path)
     end
   end
 end
