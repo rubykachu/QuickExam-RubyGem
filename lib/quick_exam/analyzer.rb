@@ -91,7 +91,7 @@ module QuickExam
 
     def clean_object
       object.question.strip!
-      object.answers.map{ |ans| ans.strip! }
+      object.answers.map(&:strip!)
       object
     end
 

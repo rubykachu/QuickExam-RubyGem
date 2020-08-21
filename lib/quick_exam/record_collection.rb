@@ -20,7 +20,7 @@ module QuickExam
     private
 
     def shuffle_answers(array_records)
-      array_records.each{ |obj| obj.shuffle_answers }
+      array_records.each(&:shuffle_answers)
     end
   end
 end
