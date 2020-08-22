@@ -5,7 +5,5 @@ gemspec
 
 group :development do
   gem "rake", "~> 12.0"
-  gem 'fasterer'
   gem 'pry'
-  gem 'rubocop'
 end

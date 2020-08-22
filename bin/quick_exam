@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+$LOAD_PATH << File.expand_path('../../lib', __FILE__)
+require 'quick_exam/cli'
+
+# silence deprecations warning
+ENV['THOR_SILENCE_DEPRECATION'] = '0'
+
+QuickExam::CLI.start
