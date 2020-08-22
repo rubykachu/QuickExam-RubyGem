@@ -56,6 +56,7 @@ namespace :gem do
   end
 
   def push_gem_to_remote
+    build_gem unless pkg_gem?
     exec "gem push quick_exam-#{QuickExam::VERSION}.gem"
   end
 
@@ -65,7 +66,7 @@ namespace :gem do
 
   def exec(cmd)
     puts "\n"
-    puts '===>' + cmd
+    puts '===> ' + cmd
     system cmd
   end
 end
