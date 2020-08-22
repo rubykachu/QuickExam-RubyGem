@@ -68,7 +68,12 @@ module QuickExam
 
     def get_answer
       return if object.question.__blank?
-      return unless answer?(line)
+      unless answer?(line)
+        return if object.answers.__blank?
+        last_index = object.answers.size - 1
+        object.answers[last_index] = "#{object.answers.last} #{line}"
+        return
+      end
 
       # Get answer
       object.answers << answer(line)
