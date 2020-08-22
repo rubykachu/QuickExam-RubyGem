@@ -6,9 +6,11 @@ You can shuffle or randomize quiz questions and answers. Shuffling is also an ef
 
 Currently, the gem `quick_exam` **only supports txt** format. With the following rules:
 
-- `Q<number>:` : Format for a question
-- `<Alphabet>.` : Format for an answer
-- `!!!Correct` : Format for an answer correct
+| Format | Description |
+|-------------|------------------------|
+| Q\<number>: | Format for a question |
+| \<Alphabet>.| Format for an answer |
+| !!!Correct | Format for an answer correct |
 
 In the future, I will analyze the file in _.docx_ or _.doc_ format
 
