@@ -1,5 +1,7 @@
 # QuickExam
 
+[![Gem Version](https://badge.fury.io/rb/quick_exam.svg)](https://badge.fury.io/rb/quick_exam)
+
 You can shuffle or randomize quiz questions and answers. Shuffling is also an effective way of preventing cheating because no two learners get questions in the same order while taking the same quiz.
 
 Currently, the gem `quick_exam` **only supports txt** format. With the following rules:
