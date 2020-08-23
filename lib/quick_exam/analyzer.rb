@@ -1,4 +1,4 @@
-require 'quick_exam/const'
+require 'quick_exam/format'
 require 'quick_exam/record'
 require 'quick_exam/record_collection'
 
@@ -6,17 +6,19 @@ module QuickExam
   class ErrorAnalyze < StandardError; end
 
   class Analyzer
-    include QuickExam::Const
+    include QuickExam::Format
     attr_reader :records, :total_line, :file
 
-    def initialize(file_path)
+    def initialize(file_path, f_ques:'' , f_corr:'')
       raise ErrorAnalyze.new('No such file') unless File.exist? file_path
       @file_path = file_path
+      @f_ques = f_ques
+      @f_corr = f_corr
       @records = QuickExam::RecordCollection.new()
     end
 
-    def self.run(file_path)
-      tool = QuickExam::Analyzer.new(file_path)
+    def self.run(file_path, f_ques:'' , f_corr:'')
+      tool = QuickExam::Analyzer.new(file_path, f_ques: f_ques, f_corr: f_corr)
       tool.analyze
       tool
     rescue => e
@@ -105,24 +107,13 @@ module QuickExam
       @object = QuickExam::Record.new()
     end
 
-    # TODO: Regex match question mark
-    # Format question: Q1: , q1. , q1) , Q1/
-    # @return Question mark
-    #
-    # i: case insensitive
-    # m: make dot match newlines
-    # x: ignore whitespace in regex
-    def regex_match_question_mark
-      /(^#{QUESTION_MARK}\d+[:|\)|\.|\/]).+\S/ixm
+    def correct_answer?(str)
+      str.downcase.include?(correct_mark(@f_corr).downcase)
     end
 
-    # TODO: Regex match answer mark
-    # Format question: A) , a. , 1/
-    # @return Answer sentence without answer mark
-    #
-    # ?<= : positive lookbehind
-    def regex_match_answer_mark
-      /(?<=^\w[\.|\)|\/]).*/
+    def end_of_line?(num_row)
+      @total_line ||= `wc -l "#{file.path}"`.strip.split(' ')[0].to_i
+      num_row == total_line
     end
 
     def question?(str)
@@ -140,7 +131,8 @@ module QuickExam
     # x: ignore whitespace in regex
     # ?= : positive lookahead
     def answer(str)
-      ans_with_mark_correct = /(#{regex_match_answer_mark}(?=!!!Correct))/
+      corr_mark = correct_mark(@f_corr, safe: true)
+      ans_with_mark_correct = /(#{regex_match_answer_mark}(?=#{corr_mark}))/
       ans_without_mark_correct = regex_match_answer_mark
       str[(/#{ans_with_mark_correct}|#{regex_match_answer_mark}/ix)].__presence || str
     end
@@ -154,13 +146,25 @@ module QuickExam
       str[(/(?<=#{letter_question}).+/im)].__presence || str
     end
 
-    def correct_answer?(str)
-      str.downcase.include?(CORRECT_MARK.downcase)
+    # TODO: Regex match question mark
+    # Format question: Q1: , q1. , q1) , Q1/
+    # @return: Question mark
+    #
+    # i: case insensitive
+    # m: make dot match newlines
+    # x: ignore whitespace in regex
+    def regex_match_question_mark
+      ques_mark = question_mark(@f_ques, safe: true)
+      /(^#{ques_mark}[\s]*\d+[:|\)|\.|\/]).+\S/ixm
     end
 
-    def end_of_line?(num_row)
-      @total_line ||= `wc -l "#{file.path}"`.strip.split(' ')[0].to_i
-      num_row == total_line
+    # TODO: Regex match answer mark
+    # Format question: A) , a. , 1/
+    # @return: Answer sentence without answer mark
+    #
+    # ?<= : positive lookbehind
+    def regex_match_answer_mark
+      /(?<=^\w[\.|\)|\/]).*/
     end
 
     # TODO: Remove non-unicode character
@@ -177,9 +181,9 @@ module QuickExam
     end
 
     def protect_instance_variable
-      remove_instance_variable(:@object)
-      remove_instance_variable(:@line)
-      remove_instance_variable(:@file_path)
+      %w(@object @line @file_path @f_ques @f_corr).each do |v|
+        remove_instance_variable(:"#{v}")
+      end
     end
   end
 end

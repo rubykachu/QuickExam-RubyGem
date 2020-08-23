@@ -1,17 +1,18 @@
 require 'fileutils'
-require 'quick_exam/const'
+require 'quick_exam/format'
 
 module QuickExam
   class ErrorExport < StandardError; end
 
   class Export
     class << self
-      include QuickExam::Const
+      include QuickExam::Format
 
-      def run(file_path, shuffle_question: true, shuffle_answer: false, count: 2, dest: '')
+      def run(file_path, shuffle_question: true, shuffle_answer: false, count: 2, dest: '', f_ques:'' , f_corr:'')
         check_path(dest, file_path)
 
-        @tool = QuickExam::Analyzer.run(file_path)
+        @tool = QuickExam::Analyzer.run(file_path, f_ques: f_ques , f_corr: f_corr)
+        @f_ques = question_mark(f_ques)
         @records = tool.records.mixes(count, shuffle_question: shuffle_question, shuffle_answer: shuffle_answer)
         process_export_files
       end
@@ -22,9 +23,9 @@ module QuickExam
 
       def check_path(dest_path, file_path)
         if dest_path.__blank?
-          @dest = File.dirname(file_path) + '/quick_exam_export/'
+          @dest = File.dirname(file_path) + "/#{FOLDER_NAME_EXPORT}/"
         else
-          @dest = dest_path + '/quick_exam_export/'
+          @dest = dest_path + "/#{FOLDER_NAME_EXPORT}/"
         end
 
         return raise ErrorExport.new('No such file') unless File.exist?(file_path)
@@ -59,7 +60,7 @@ module QuickExam
         File.open(path_filename, 'w') do |f|
           object_qna.each_with_index do |ticket, i|
             ans = ticket.correct_indexes.map { |ci| alphabets[ci] }.join(', ')
-            f.write "#{QUESTION_MARK}#{i + 1}. #{ans}"
+            f.write "#{@f_ques}#{i + 1}. #{ans}"
             f.write("\n")
           end
         end
@@ -73,7 +74,7 @@ module QuickExam
       end
 
       def question(str, index)
-        "#{QUESTION_MARK}#{index}. #{str}\n"
+        "#{@f_ques}#{index}. #{str}\n"
       end
 
       def answers(data)
