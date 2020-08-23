@@ -68,12 +68,13 @@ module QuickExam
 
     def get_answer
       return if object.question.__blank?
-      unless answer?(line)
-        return if object.answers.__blank?
-        last_index = object.answers.size - 1
-        object.answers[last_index] = "#{object.answers.last} #{line}"
-        return
-      end
+      return unless answer?(line)
+      # unless answer?(line) || question?(line)
+      #   return if object.answers.__blank?
+      #   last_index = object.answers.size - 1
+      #   object.answers[last_index] = "#{object.answers.last} #{line}"
+      #   return
+      # end
 
       # Get answer
       object.answers << answer(line)
@@ -112,7 +113,7 @@ module QuickExam
     # ?<= : positive lookbehind
     def question?(str)
       str = rid_non_ascii!(str)
-      !str[(/(?<=#{QUESTION_MARK}.:).*/ixm)].to_s.empty?
+      str[(/(#{QUESTION_MARK}\d+:).+\S/ixm)].__present?
     end
 
     # TODO: Regex answer
@@ -140,7 +141,8 @@ module QuickExam
     # m: make dot match newlines
     # ?<= : positive lookbehind
     def question(str)
-      str[(/(?<=#{QUESTION_MARK}.:).*/im)].__presence || str
+      letter_question = str.match(/(^#{QUESTION_MARK}\d+:).+\S/im).to_a.last
+      str[(/(?<=#{letter_question}).+/im)].__presence || str
     end
 
     def correct_answer?(str)

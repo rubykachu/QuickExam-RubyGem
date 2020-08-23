@@ -1,4 +1,4 @@
-Q1: How do you run migration?
+Q13: How do you run migration?
 (Select multi choices)
 
 A. rails db:migrate !!!Correct
@@ -7,7 +7,9 @@ B. rake db:migrate !!!Correct
 D. rails db:migration
 
 
-Q2: How to access console log screen in rails? (multi choices)
+Q222: How to access console log screen in rails?
+
+(Select multi choices)
 
 A. rails console !!!Correct
 B. rake c !!!Correct
