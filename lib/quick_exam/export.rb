@@ -1,3 +1,4 @@
+require 'pry'
 require 'fileutils'
 require 'quick_exam/format'
 
@@ -7,13 +8,17 @@ module QuickExam
   class Export
     class << self
       include QuickExam::Format
+      RUN_ARGS = %w(shuffle_question shuffle_answer count dest f_ques f_corr)
 
-      def run(file_path, shuffle_question: true, shuffle_answer: false, count: 2, dest: '', f_ques:'' , f_corr:'')
-        check_path(dest, file_path)
+      def run(file_path, options={})
+        arg = validate_arguments!(options)
+        count = arg[:count].__presence || 2
 
-        @tool = QuickExam::Analyzer.run(file_path, f_ques: f_ques , f_corr: f_corr)
-        @f_ques = question_mark(f_ques)
-        @records = tool.records.mixes(count, shuffle_question: shuffle_question, shuffle_answer: shuffle_answer)
+        check_path(arg[:dest], file_path)
+
+        @tool = QuickExam::Analyzer.run(file_path, f_ques: arg[:f_ques] , f_corr: arg[:f_corr])
+        @f_ques = question_mark(arg[:f_ques])
+        @records = tool.records.mixes(count, shuffle_question: arg[:shuffle_question], shuffle_answer: arg[:shuffle_answer])
         process_export_files
       end
 
@@ -85,6 +90,15 @@ module QuickExam
 
       def alphabets
         @alphabets ||= ('A'..'Z').to_a
+      end
+
+      def validate_arguments!(args)
+        invalid_arg = args.detect{ |arg, _| !RUN_ARGS.include?(arg.to_s) }
+        raise ArgumentError.new("unknow keyword #{invalid_arg[0]}") if invalid_arg.__present?
+        RUN_ARGS.each_with_object({}) do |arg, memo|
+          arg = arg.to_sym
+          memo[arg] = args[arg]
+        end
       end
     end
   end
