@@ -1,7 +1,7 @@
 Câu 13. How do you run migration?
 (Select multi choices)
 
-1) rails db:migrate !!!Truerue
+1) rails db:migrate !!!True
 2/ rake db:migrate !!!True
 C. rake db:migration
 D. rails db:migration

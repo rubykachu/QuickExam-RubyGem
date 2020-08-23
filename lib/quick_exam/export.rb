@@ -8,7 +8,7 @@ module QuickExam
   class Export
     class << self
       include QuickExam::Format
-      RUN_ARGS = %w(shuffle_question shuffle_answer count dest f_ques f_corr)
+      RUN_ARGS = %w(shuffle_question shuffle_answer same_answer count dest f_ques f_corr)
 
       def run(file_path, options={})
         arg = validate_arguments!(options)
@@ -18,13 +18,22 @@ module QuickExam
 
         @tool = QuickExam::Analyzer.run(file_path, f_ques: arg[:f_ques] , f_corr: arg[:f_corr])
         @f_ques = question_mark(arg[:f_ques])
-        @records = tool.records.mixes(count, shuffle_question: arg[:shuffle_question], shuffle_answer: arg[:shuffle_answer])
+        @records = mixes(count, arg)
         process_export_files
       end
 
       private
 
       attr_reader :records, :object_qna, :dest, :tool
+
+      def mixes(count, arg)
+        tool.records.mixes(
+          count,
+          shuffle_question: arg[:shuffle_question],
+          shuffle_answer: arg[:shuffle_answer],
+          same_answer: arg[:same_answer]
+        )
+      end
 
       def check_path(dest_path, file_path)
         if dest_path.__blank?

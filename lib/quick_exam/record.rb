@@ -13,9 +13,9 @@ module QuickExam
     end
 
     def shuffle_answers
-      ans = answers_with_hash.sort{|a, b| rand <=> rand }.to_h
-      @answers = ans.values
-      @correct_indexes = specific_index_correct_answer(ans)
+      ans = answers_with_hash.sort{|a, b| rand(40) <=> rand(40) }.to_h
+      self.answers = ans.values
+      self.correct_indexes = specific_index_correct_answer(ans)
     end
 
     private
@@ -23,7 +23,7 @@ module QuickExam
     def specific_index_correct_answer(data_hash)
       correct_indexes.each_with_object([]) do |i, indexes|
         indexes << data_hash.find_index { |key, _| key == i }
-      end
+      end.sort
     end
   end
 end
