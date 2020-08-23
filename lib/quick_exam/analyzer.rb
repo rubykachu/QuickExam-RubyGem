@@ -105,35 +105,44 @@ module QuickExam
       @object = QuickExam::Record.new()
     end
 
-    # TODO: Regex question
-    # Format question: Q1: , Q2: , Q3:
+    # TODO: Regex match question mark
+    # Format question: Q1: , q1. , q1) , Q1/
+    # @return Question mark
+    #
     # i: case insensitive
     # m: make dot match newlines
     # x: ignore whitespace in regex
-    # ?<= : positive lookbehind
-    def question?(str)
-      str = rid_non_ascii!(str)
-      str[(/(#{QUESTION_MARK}\d+:).+\S/ixm)].__present?
+    def regex_match_question_mark
+      /(^#{QUESTION_MARK}\d+[:|\)|\.|\/]).+\S/ixm
     end
 
-    # TODO: Regex answer
-    # Format answer: A. , B. , C. , D.
-    # i: case insensitive
-    # x: ignore whitespace in regex
+    # TODO: Regex match answer mark
+    # Format question: A) , a. , 1/
+    # @return Answer sentence without answer mark
+    #
     # ?<= : positive lookbehind
+    def regex_match_answer_mark
+      /(?<=^\w[\.|\)|\/]).*/
+    end
+
+    def question?(str)
+      str = rid_non_ascii!(str)
+      str[(regex_match_question_mark)].__present?
+    end
+
     def answer?(str)
       str = rid_non_ascii!(str)
-      !str[(/(?<=^\w\.).*/ix)].to_s.empty?
+      !str[(regex_match_answer_mark)].to_s.empty?
     end
 
     # TODO: Regex get clean answer
     # i: case insensitive
-    # ?<= : positive lookbehind
+    # x: ignore whitespace in regex
     # ?= : positive lookahead
     def answer(str)
-      ans_with_mark_correct = /((?<=^\w\.).*(?=!!!Correct))/
-      ans_without_mark_correct = /(?<=^\w\.).*/
-      str[(/#{ans_with_mark_correct}|#{ans_without_mark_correct}/ix)].__presence || str
+      ans_with_mark_correct = /(#{regex_match_answer_mark}(?=!!!Correct))/
+      ans_without_mark_correct = regex_match_answer_mark
+      str[(/#{ans_with_mark_correct}|#{regex_match_answer_mark}/ix)].__presence || str
     end
 
     # TODO: Regex get clean question
@@ -141,7 +150,7 @@ module QuickExam
     # m: make dot match newlines
     # ?<= : positive lookbehind
     def question(str)
-      letter_question = str.match(/(^#{QUESTION_MARK}\d+:).+\S/im).to_a.last
+      letter_question = Regexp.quote(str.match(regex_match_question_mark).to_a.last.to_s)
       str[(/(?<=#{letter_question}).+/im)].__presence || str
     end
 

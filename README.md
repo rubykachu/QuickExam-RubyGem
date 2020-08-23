@@ -6,37 +6,41 @@ You can shuffle or randomize quiz questions and answers. Shuffling is also an ef
 
 Currently, the gem `quick_exam` **only supports txt** format. With the following rules:
 
-| Format | Description |
-|-------------|------------------------|
-| Q\<number>: | Format for a question |
-| \<Alphabet>.| Format for an answer |
-| !!!Correct | Format for an answer correct |
+| Format | Description | Example |
+|-------------|------------------------|----|
+| `Q<number>:` or `Q<number>)` or `Q<number>/` | Format for a question. Not case sensitive | `Q1.` or `Q1)` or `Q1/` |
+| `<alphabet or numeric>.` or `<alphabet or numeric>)` or `<alphabet or numeric>/` | Format for an answer. Not case sensitive | `A.` or `A)` or `A/` |
+| `!!!Correct` | Format for an answer correct. Not case sensitive | `!!!Correct` |
 
 In the future, I will analyze the file in _.docx_ or _.doc_ format
 
 **Sample data**
->
-    Q1: How do you run migration?
-    (Select multi choices)
+```
+  Q1. How do you run migration?
+  (Select multi choices)
 
-    A. rails db:migrate !!!Correct
-    B. rake db:migrate !!!Correct
-    C. rake db:migration
-    D. rails db:migration
+  a) rails db:migrate !!!Correct
+  b/ rake db:migrate !!!Correct
+  c. rake db:migration
+  d. rails db:migration
 
-    Q2: How to access console log screen in rails? (multi choices)
 
-    A. rails console !!!Correct
-    B. rake c !!!Correct
-    C. rake console --sandbox !!!Correct
-    D. rails c --sandbox !!!Correct
+  Q20) How to access console log screen in rails?
 
-    Q3: What is the purpose of using div tags in HTML?
+  (Select multi choices)
 
-    A. For creating different styles.
-    B. For creating different sections. !!!Correct
-    C. For adding headings.
-    D. For adding titles.
+  A) rails console !!!Correct
+  B/ rake c !!!Correct
+  C. rake console --sandbox !!!Correct
+  D. rails c --sandbox !!!Correct
+
+  Q333/ What is the purpose of using div tags in HTML?
+
+  1) For creating different styles.
+  2. For creating different sections. !!!Correct
+  3/ For adding headings.
+  D. For adding titles.
+```
 
 
 ## Installation
