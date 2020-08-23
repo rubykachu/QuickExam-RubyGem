@@ -15,8 +15,17 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/tm-minhtang/quick_exam.git'
   spec.license       = 'MIT'
   spec.post_install_message = <<EOF
+.-------------------.
+|  Hi! quick_exam   |
+'-------------------'
+    ^      (\_/)
+    '----- (O.o)
+           (> <)
+
 Thanks for installing
 Gem quick_exam #{QuickExam::VERSION} (latest) (c) #{year} Tang Quoc Minh [vhquocminhit@gmail.com]
+
+-------------------
 EOF
 
   spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')

@@ -3,7 +3,7 @@ Câu 13. How do you run migration?
 
 1) rails db:migrate !!!True
 2/ rake db:migrate !!!True
-C. rake db:migration
+C. rake db:migration
 D. rails db:migration
 
 
@@ -12,8 +12,8 @@ Câu 222) How to access console log screen in rails?
 (Select multi choices)
 
 a) rails console !!!True
-B/ rake c !!!True
-C. rake console --sandbox !!!True
+B/ rake c !!!True
+C. rake console --sandbox !!!True
 D. rails c --sandbox !!!True
 
 Câu 3/ What is the purpose of using div tags in HTML?

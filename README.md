@@ -6,11 +6,11 @@ You can shuffle or randomize quiz questions and answers. Shuffling is also an ef
 
 Currently, the gem `quick_exam` **only supports txt** format. With the following rules:
 
-| Format | Description | Example |
-|-------------|------------------------|----|
-| `Q<number>:` or `Q<number>)` or `Q<number>/` | Format for a question. Not case sensitive | `Q1.` or `Q1)` or `Q1/` |
-| `<alphabet or numeric>.` or `<alphabet or numeric>)` or `<alphabet or numeric>/` | Format for an answer. Not case sensitive | `A.` or `A)` or `A/` |
-| `!!!Correct` | Format for an answer correct. Not case sensitive | `!!!Correct` |
+| Description | Example |
+|-------------|------------------------|
+| Format for a question. Not case sensitive and can custom format | `Q1.` or `Q1)` or `Q1/` |
+| Format for an answer. Not case sensitive | `A.` or `A)` or `A/` |
+| Format for an answer correct. Not case sensitive and can custom format | `!!!Correct` |
 
 In the future, I will analyze the file in _.docx_ or _.doc_ format
 
@@ -19,8 +19,8 @@ In the future, I will analyze the file in _.docx_ or _.doc_ format
   Q1. How do you run migration?
   (Select multi choices)
 
-  a) rails db:migrate !!!Correct
-  b/ rake db:migrate !!!Correct
+  a) rails db:migrate !!!True
+  b/ rake db:migrate !!!True
   c. rake db:migration
   d. rails db:migration
 
@@ -29,15 +29,15 @@ In the future, I will analyze the file in _.docx_ or _.doc_ format
 
   (Select multi choices)
 
-  A) rails console !!!Correct
-  B/ rake c !!!Correct
-  C. rake console --sandbox !!!Correct
-  D. rails c --sandbox !!!Correct
+  A) rails console !!!True
+  B/ rake c !!!True
+  C. rake console --sandbox !!!True
+  D. rails c --sandbox !!!True
 
   Q333/ What is the purpose of using div tags in HTML?
 
   1) For creating different styles.
-  2. For creating different sections. !!!Correct
+  2. For creating different sections. !!!True
   3/ For adding headings.
   D. For adding titles.
 ```
@@ -70,10 +70,17 @@ $ bundle install
 Export shuffle or randomize quiz question and answers
 
 ```bash
-$ quick_exam export path_file --shuffle_question=true --shuffle_answers=true --count=4 --dest="./folder"
+$ quick_exam export path_file \
+                    --shuffle-question=true \ # alias: -q
+                    --shuffle-answers=true \  # alias: -a
+                    --same-answer=false \     # alias: -s
+                    --count=4 \               # alias: -c
+                    --f-ques="Question" \     # alias: -Q
+                    --f-corr="!!!Right" \     # alias: -C
+                    --dest="./folder"         # alias: -d
 ```
 
-Run command
+Run command help
 
 ```bash
 $ quick_exam help export
@@ -87,10 +94,22 @@ Usage:
 Options:
   -q, [--shuffle-question=true|false]  # Shuffle the question
                                        # Default: true
+
   -a, [--shuffle-answer=true|false]    # Shuffle the answer
                                        # Default: false
+
+  -s, [--same-answer=false]            # The same answer for all questionnaires
+                                       # Default: false
+
+  -Q, [--f-ques=Q]                     # Question format. Just prefix the question
+                                       # Default: Q
+
+  -C, [--f-corr=!!!T]                  # Correct answer format
+                                       # Default: !!!T
+
   -c, [--count=2]                      # Number of copies to created
                                        # Default: 2
+
   -d, [--dest=~/quick_exam_export/]    # File storage path after export
 
 shuffled questions and answers then export file
@@ -115,7 +134,7 @@ The object `analyzer` will have methods:
 To shuffle quiz question and answers
 
 ```ruby
-analyzer.records.mixes(count, shuffle_question: true, shuffle_answer: false)
+analyzer.records.mixes(count, shuffle_question: true, shuffle_answer: false, same_answer: false)
 ```
 
 The method `mixes` have 3 arguments:
@@ -124,6 +143,7 @@ The method `mixes` have 3 arguments:
 count:               # Number of copies to created
 shuffle_question:    # Shuffle quiz question. Default: true
 shuffle_answer:      # Shuffle answer. Default: false
+same_answer:         # Same answer for all questionnaires. Default: false
 ```
 
 ## Development
