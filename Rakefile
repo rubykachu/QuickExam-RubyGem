@@ -16,13 +16,12 @@ namespace :gem do
   end
 
   task :push do
-    push_gem_to_remote
-    p 'Pushed :)'
+    p 'Pushed :)' if push_gem_to_remote
   end
 
-  task :remove do
-    remove_gem_from_remote
-    p 'Removed :)'
+  task :remove do |t, v|
+    version = ENV['VERSION'].nil? ? QuickExam::VERSION : ENV['VERSION']
+    p 'Removed :)' if remove_gem_from_remote(version)
   end
 
   private
@@ -60,8 +59,8 @@ namespace :gem do
     exec "gem push quick_exam-#{QuickExam::VERSION}.gem"
   end
 
-  def remove_gem_from_remote
-    exec "gem yank quick_exam -v #{QuickExam::VERSION} -p ruby"
+  def remove_gem_from_remote(version)
+    exec "gem yank quick_exam -v #{version} -p ruby"
   end
 
   def exec(cmd)
