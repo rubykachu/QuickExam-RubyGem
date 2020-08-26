@@ -1,10 +1,7 @@
-require 'pry'
 require 'fileutils'
 require 'quick_exam/format'
 
 module QuickExam
-  class ErrorExport < StandardError; end
-
   class Export
     class << self
       include QuickExam::Format
