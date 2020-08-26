@@ -17,20 +17,12 @@ module QuickExam
       @records = QuickExam::RecordCollection.new()
     end
 
-    def self.run(file_path, f_ques:'' , f_corr:'')
-      tool = QuickExam::Analyzer.new(file_path, f_ques: f_ques, f_corr: f_corr)
-      tool.analyze
-      tool
-    rescue => e
-      raise ErrorAnalyze.new('Data can not analyze')
-    end
-
     def analyze
       raise IOError.new 'File does not exist or is unreadable' unless File.exists? file_path
       open_file!
       data_standardize
       protect_instance_variable
-      records
+      self
     rescue => e
       raise ErrorAnalyze.new('Data can not analyze')
     end
@@ -181,7 +173,7 @@ module QuickExam
     end
 
     def protect_instance_variable
-      %w(@object @line @file_path @f_ques @f_corr).each do |v|
+      %w(@object @line @file_path).each do |v|
         remove_instance_variable(:"#{v}")
       end
     end

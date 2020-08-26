@@ -15,8 +15,7 @@ module QuickExam
         count = arg[:count].__presence || 2
 
         check_path(arg[:dest], file_path)
-
-        @tool = QuickExam::Analyzer.run(file_path, f_ques: arg[:f_ques] , f_corr: arg[:f_corr])
+        proccess_analyze(file_path, arg)
         @f_ques = question_mark(arg[:f_ques])
         @records = mixes(count, arg)
         process_export_files
@@ -24,10 +23,15 @@ module QuickExam
 
       private
 
-      attr_reader :records, :object_qna, :dest, :tool
+      attr_reader :records, :object_qna, :dest, :analyzer
+
+      def proccess_analyze(file_path, arg)
+        @analyzer = QuickExam::Analyzer.new(file_path, f_ques: arg[:f_ques] , f_corr: arg[:f_corr])
+        analyzer.analyze
+      end
 
       def mixes(count, arg)
-        tool.records.mixes(
+        analyzer.records.mixes(
           count,
           shuffle_question: arg[:shuffle_question],
           shuffle_answer: arg[:shuffle_answer],
@@ -81,9 +85,9 @@ module QuickExam
       end
 
       def path_filename(index_order, extra_name: '')
-        basename = File.basename(tool.file.path, '.*')
+        basename = File.basename(analyzer.file.path, '.*')
         basename = ("#{basename}_%.3i" % index_order) + extra_name
-        extname = File.extname(tool.file.path)
+        extname = File.extname(analyzer.file.path)
         "#{dest}#{basename}#{extname}"
       end
 
