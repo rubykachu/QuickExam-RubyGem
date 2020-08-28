@@ -18,9 +18,7 @@ module QuickExam
       end
 
       def analyze
-        open_file!
         data_standardize
-        protect_instance_variable
         self
       rescue => e
         raise ErrorAnalyze.new('Data can not analyze')
@@ -28,29 +26,25 @@ module QuickExam
 
       private
 
-      attr_reader :object, :line
       include QuickExam::Analyst::Common
 
-      def open_file!
-        @file = File.open(@file_path, 'r')
-      end
-
       def data_standardize
+        file = File.open(@file_path, 'r')
+        @total_line = File.foreach(file).count
         @object = QuickExam::Record.new()
 
-        @file.each_line.with_index do |line, num_row|
-          num_row += 1 # The first row is 1
-          @line = line
+        file.each_line.with_index do |row, idx|
+          idx += 1 # The first row is 1
 
-          if end_of_line?(num_row) || end_of_one_ticket_for_next_question?
-            get_answer # if the last line is answer then will get answer
+          if end_of_line?(idx) || end_of_one_ticket_for_next_question?(row)
+            get_answer(row) # if the last line is answer then will get answer
             collect_object_ticket
           end
 
-          next if line.__blank?
+          next if row.__blank?
 
-          next if get_answer
-          next if get_question
+          next if get_answer(row)
+          next if get_question(row)
         end
         records
       end

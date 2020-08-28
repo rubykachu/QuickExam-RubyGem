@@ -1,38 +1,31 @@
 module QuickExam
   module Analyst
     module Common
-      def get_question
-        return if object.answers.__present?
-        object.question += question(line)
+      def get_question(str)
+        return if @object.answers.__present?
+        @object.question += question(str)
       end
 
-      def get_answer
-        return if object.question.__blank?
-        return unless answer?(line)
-        # unless answer?(line) || question?(line)
-        #   return if object.answers.__blank?
-        #   last_index = object.answers.size - 1
-        #   object.answers[last_index] = "#{object.answers.last} #{line}"
-        #   return
-        # end
+      def get_answer(str)
+        return if @object.question.__blank?
+        return unless answer?(str)
 
         # Get answer
-        object.answers << answer(line)
-        get_correct_indexes_answer
+        @object.answers << answer(str)
+        get_correct_indexes_answer(str)
       end
 
-      def get_correct_indexes_answer
-        return unless correct_answer?(line)
-        object.correct_indexes << object.answers.size - 1
+      def get_correct_indexes_answer(str)
+        return unless correct_answer?(str)
+        @object.correct_indexes << @object.answers.size - 1
       end
 
-      def end_of_one_ticket_for_next_question?
-        object.answers.__present? && object.question.__present? && question?(line)
+      def end_of_one_ticket_for_next_question?(str)
+        @object.answers.__present? && @object.question.__present? && question?(str)
       end
 
       def end_of_line?(num_row)
-        @total_line ||= `wc -l "#{@file.path}"`.strip.split(' ')[0].to_i
-        num_row == total_line
+        num_row == @total_line
       end
 
       def collect_object_ticket
@@ -41,9 +34,9 @@ module QuickExam
       end
 
       def clean_object
-        object.question.strip!
-        object.answers.map(&:strip!)
-        object
+        @object.question.strip!
+        @object.answers.map(&:strip!)
+        @object
       end
 
       def reset_object_ticket
@@ -116,12 +109,6 @@ module QuickExam
         return str if non_utf8 == "\n" || non_utf8 == "\t"
         str.slice!(str[/[^[:print:]]/])
         str
-      end
-
-      def protect_instance_variable
-        %w(@object @line @file_path @file).each do |v|
-          remove_instance_variable(:"#{v}")
-        end
       end
     end
   end
