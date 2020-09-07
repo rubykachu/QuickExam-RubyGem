@@ -37,7 +37,6 @@ module QuickExam
         @object = QuickExam::Record.new()
 
         data.each.with_index do |row, idx|
-          binding.pry
           row = row.text
           idx += 1 # The first row is 1
 
