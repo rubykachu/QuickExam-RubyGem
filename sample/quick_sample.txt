@@ -4,7 +4,7 @@ Q13. How do you run migration?
 1) rails db:migrate !!!T
 2/ rake db:migrate !!!T
 C. rake db:migration
-D. rails db:migration
+D. rails db:migration
 
 
 Q222) How to access console log screen in rails?
@@ -14,13 +14,11 @@ Q222) How to access console log screen in rails?
 a) rails console !!!T
 B/ rake c !!!T
 C. rake console --sandbox !!!T
-D. rails c --sandbox !!!T
+D. rails c --sandbox !!!T
 
 Q3/ What is the purpose of using div tags in HTML?
 
-A. For creating
-
-different styles.
+A. For creating different styles.
 B. For creating different sections. !!!T
 C. For adding headings.
 D. For adding titles.

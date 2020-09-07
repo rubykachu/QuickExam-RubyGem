@@ -4,7 +4,9 @@ source "https://rubygems.org"
 gemspec
 
 gem 'nokogiri'
-gem 'sanitize', '~> 4.0', '>= 4.0.1'
+gem 'sanitize', '4.6.6'
+gem 'docx', '0.5.0'
+
 group :development do
   gem "rake", "~> 12.0"
   gem 'pry'
