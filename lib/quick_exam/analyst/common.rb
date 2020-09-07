@@ -21,6 +21,7 @@ module QuickExam
       end
 
       def end_of_one_ticket_for_next_question?(str)
+        str = Sanitize.fragment(str)
         @object.answers.__present? && @object.question.__present? && question?(str)
       end
 
@@ -29,7 +30,7 @@ module QuickExam
       end
 
       def collect_object_ticket
-        records << clean_object
+        @records << clean_object
         reset_object_ticket
       end
 
@@ -49,12 +50,14 @@ module QuickExam
 
       def question?(str)
         str = rid_non_ascii!(str)
-        str[(regex_match_question_mark)].__present?
+        str = Sanitize.fragment(str).__squish
+        str[(regex_question_mark)].__present?
       end
 
       def answer?(str)
         str = rid_non_ascii!(str)
-        !str[(regex_match_answer_mark)].to_s.empty?
+        str = Sanitize.fragment(str).__squish
+        str[(regex_answer_mark)].__present?
       end
 
       # TODO: Regex get clean answer
@@ -63,9 +66,9 @@ module QuickExam
       # ?= : positive lookahead
       def answer(str)
         corr_mark = correct_mark(@f_corr, safe: true)
-        ans_with_mark_correct = /(#{regex_match_answer_mark}(?=#{corr_mark}))/
-        ans_without_mark_correct = regex_match_answer_mark
-        str[(/#{ans_with_mark_correct}|#{regex_match_answer_mark}/ix)].__presence || str
+        ans_with_mark_correct = /(#{regex_answer_sentence}(?=#{corr_mark}))/
+        ans_without_mark_correct = regex_answer_sentence
+        str[(/#{ans_with_mark_correct}|#{regex_answer_sentence}/ix)].__presence || str
       end
 
       # TODO: Regex get clean question
@@ -73,7 +76,7 @@ module QuickExam
       # m: make dot match newlines
       # ?<= : positive lookbehind
       def question(str)
-        letter_question = Regexp.quote(str.match(regex_match_question_mark).to_a.last.to_s)
+        letter_question = Regexp.quote(str.match(regex_question_mark).to_a.last.to_s)
         str[(/(?<=#{letter_question}).+/im)].__presence || str
       end
 
@@ -84,18 +87,25 @@ module QuickExam
       # i: case insensitive
       # m: make dot match newlines
       # x: ignore whitespace in regex
-      def regex_match_question_mark
+      def regex_question_mark
         ques_mark = question_mark(@f_ques, safe: true)
-        /(^#{ques_mark}[\s]*\d+[:|\)|\.|\/]).+\S/ixm
+        /(^#{ques_mark}[\s]*\d+[:|\)|\.|\/])/ixm
       end
 
-      # TODO: Regex match answer mark
+      # TODO: Regex match answer sentence
       # Format question: A) , a. , 1/
       # @return: Answer sentence without answer mark
       #
       # ?<= : positive lookbehind
-      def regex_match_answer_mark
-        /(?<=^\w[\.|\)|\/]).*/
+      def regex_answer_sentence
+        /(?<=#{regex_answer_mark}).*/
+      end
+
+      # TODO: Regex match answer mark
+      # Format question: A) , a. , 1/
+      # @return: Answer mark
+      def regex_answer_mark
+        /(^\w[\.|\)|\/])/
       end
 
       # TODO: Remove non-unicode character
@@ -105,9 +115,9 @@ module QuickExam
       #   [:print:] : Visible characters and spaces (anything except control characters)
       def rid_non_ascii!(str)
         # Solution 1: str.chars.reject { |char| char.ascii_only? and (char.ord < 32 or char.ord == 127) }.join
-        non_utf8 = str.slice(str[/[^[:print:]]/])
+        non_utf8 = str.slice(str[/[^[:print:]]/].to_s)
         return str if non_utf8 == "\n" || non_utf8 == "\t"
-        str.slice!(str[/[^[:print:]]/])
+        str.slice!(str[/[^[:print:]]/].to_s)
         str
       end
     end
