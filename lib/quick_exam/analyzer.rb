@@ -1,5 +1,6 @@
 require 'quick_exam/format'
 require 'quick_exam/analyst/base_text'
+require 'quick_exam/analyst/base_docx'
 require 'quick_exam/analyst/base_html'
 
 module QuickExam
@@ -17,6 +18,7 @@ module QuickExam
     def analyze
       case
       when txt? then process_base_text
+      when docx? then process_base_docx
       when html? then process_base_html
       end
     end
@@ -39,12 +41,24 @@ module QuickExam
       self
     end
 
+    def process_base_docx
+      docx_analyzer = QuickExam::Analyst::BaseDocx.new(@file_path, f_ques: @f_ques, f_corr: @f_corr)
+      docx_analyzer.analyze
+      @records = docx_analyzer.records
+      @total_line = docx_analyzer.total_line
+      self
+    end
+
     def txt?
       File.extname(@file_path) == '.txt'
     end
 
     def html?
       File.extname(@file_path) == '.html'
+    end
+
+    def docx?
+      File.extname(@file_path) == '.docx'
     end
   end
 end
