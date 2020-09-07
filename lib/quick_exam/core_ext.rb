@@ -15,4 +15,14 @@ class Object
   def __presence
     self if __present?
   end
+
+  def __squish
+    dup.__squish!
+  end
+
+  def __squish!
+    gsub!(/[[:space:]]+/, " ")
+    strip!
+    self
+  end
 end

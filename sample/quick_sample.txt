@@ -1,26 +1,24 @@
-Câu 13. How do you run migration?
+Q13. How do you run migration?
 (Select multi choices)
 
-1) rails db:migrate !!!True
-2/ rake db:migrate !!!True
+1) rails db:migrate !!!T
+2/ rake db:migrate !!!T
 C. rake db:migration
-D. rails db:migration
+D. rails db:migration
 
 
-Câu 222) How to access console log screen in rails?
+Q222) How to access console log screen in rails?
 
 (Select multi choices)
 
-a) rails console !!!True
-B/ rake c !!!True
-C. rake console --sandbox !!!True
-D. rails c --sandbox !!!True
+a) rails console !!!T
+B/ rake c !!!T
+C. rake console --sandbox !!!T
+D. rails c --sandbox !!!T
 
-Câu 3/ What is the purpose of using div tags in HTML?
+Q3/ What is the purpose of using div tags in HTML?
 
-A. For creating
-
-different styles.
-B. For creating different sections. !!!True
+A. For creating different styles.
+B. For creating different sections. !!!T
 C. For adding headings.
 D. For adding titles.
