@@ -23,6 +23,18 @@ module QuickExam
       end
     end
 
+    def txt?
+      File.extname(@file_path) == '.txt'
+    end
+
+    def html?
+      File.extname(@file_path) == '.html'
+    end
+
+    def docx?
+      File.extname(@file_path) == '.docx'
+    end
+
     private
 
     def process_base_text
@@ -47,18 +59,6 @@ module QuickExam
       @records = docx_analyzer.records
       @total_line = docx_analyzer.total_line
       self
-    end
-
-    def txt?
-      File.extname(@file_path) == '.txt'
-    end
-
-    def html?
-      File.extname(@file_path) == '.html'
-    end
-
-    def docx?
-      File.extname(@file_path) == '.docx'
     end
   end
 end

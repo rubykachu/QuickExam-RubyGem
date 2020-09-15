@@ -8,6 +8,7 @@ module QuickExam
       RUN_ARGS = %w(shuffle_question shuffle_answer same_answer count dest f_ques f_corr)
 
       def run(file_path, options={})
+        @file = File.new(file_path)
         arg = validate_arguments!(options)
         count = arg[:count].__presence || 2
 
@@ -20,7 +21,7 @@ module QuickExam
 
       private
 
-      attr_reader :records, :object_qna, :dest, :analyzer
+      attr_reader :records, :object_qna, :dest, :analyzer, :file
 
       def proccess_analyze(file_path, arg)
         @analyzer = QuickExam::Analyzer.new(file_path, f_ques: arg[:f_ques] , f_corr: arg[:f_corr])
@@ -66,7 +67,7 @@ module QuickExam
           object_qna.each_with_index do |ticket, i|
             f.write question(ticket.question, i + 1)
             f.write answers(ticket.answers)
-            f.write("\n")
+            analyzer.html? ? f.write("<br />") : f.write("\n")
           end
         end
       end
@@ -75,26 +76,35 @@ module QuickExam
         File.open(path_filename, 'w') do |f|
           object_qna.each_with_index do |ticket, i|
             ans = ticket.correct_indexes.map { |ci| alphabets[ci] }.join(', ')
-            f.write "#{@f_ques}#{i + 1}. #{ans}"
-            f.write("\n")
+            str = "#{@f_ques}#{i + 1}. #{ans}"
+            if analyzer.html?
+              f.write("<p>#{str}</p>")
+            else
+              f.write(str)
+              f.write("\n")
+            end
           end
         end
       end
 
       def path_filename(index_order, extra_name: '')
-        basename = File.basename(analyzer.file.path, '.*')
+        basename = File.basename(file.path, '.*')
         basename = ("#{basename}_%.3i" % index_order) + extra_name
-        extname = File.extname(analyzer.file.path)
+        extname = analyzer.docx? ? '.docx.txt' : File.extname(file.path)
         "#{dest}#{basename}#{extname}"
       end
 
       def question(str, index)
-        "#{@f_ques}#{index}. #{str}\n"
+        str = "#{@f_ques}#{index}. #{str}"
+        analyzer.html? ? "<p>#{str}</p>" : "#{str}\n"
       end
 
       def answers(data)
         str_answer = ''
-        data.each_with_index { |str, i| str_answer += "#{alphabets[i]}. #{str}\n" }
+        data.each_with_index do |str, i|
+          str = "#{alphabets[i]}. #{str}"
+          str_answer += analyzer.html? ? "<p>#{str}</p>" : "#{str}\n"
+        end
         str_answer
       end
 
