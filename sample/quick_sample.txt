@@ -1,24 +1,107 @@
-Q13. How do you run migration?
-(Select multi choices)
+Q1. Who are all ________ people?
+A. this
+B. those !Correct
+C. them
+D. that
 
-1) rails db:migrate !!!T
-2/ rake db:migrate !!!T
-C. rake db:migration
-D. rails db:migration
+Q2. Claude is ________.
+A. Frenchman
+B. a French !Correct
+C. a Frenchman
+D. French man
 
+Q3. I ____ a car next year.
+A. buy
+B. am buying !Correct
+C. going to buy
+D. bought
 
-Q222) How to access console log screen in rails?
+Q4. They are all ________ ready for the party.
+A. getting !Correct
+B. going
+C. doing
+D. putting
 
-(Select multi choices)
+Q5. When do you go ________ bed?
+A. to !Correct
+B. to the
+C. in
+D. in the
 
-a) rails console !!!T
-B/ rake c !!!T
-C. rake console --sandbox !!!T
-D. rails c --sandbox !!!T
+Q6. London is famous for _____ red buses.
+A. it’s
+B. its !Correct
+C. it
+D. it is
 
-Q3/ What is the purpose of using div tags in HTML?
+Q7. Is there _____ milk in the fridge?
+A. a lot
+B. many
+C. much
+D. some !Correct
 
-A. For creating different styles.
-B. For creating different sections. !!!T
-C. For adding headings.
-D. For adding titles.
+Q8. There is a flower shop in front _____ my house.
+A. of !Correct
+B. to
+C. off
+D. in
+
+Q9. Where are _____ children? – They go to school.
+A. the !Correct
+B. you
+C. a
+D. an
+
+Q10. Those students are working very _____ for their next exams.
+A. hardly
+B. hard !Correct
+C. harder
+D. hardest
+
+Q11. Jane _____ as a fashion designer for ten years before becoming a famous singer.
+A. worked !Correct
+B. is working
+C. works
+D. will work
+
+Q12. Dan can _____ the drum very well.
+A. play !Correct
+B. do
+C. make
+D. think
+
+Q13. My friend is ______ so she has a lot of free time.
+A. singer
+B. married
+C. single !Correct
+D. free
+
+Q14. I know somebody ________ can play the guitar.
+A. he
+B. who !Correct
+C. what
+D. that he
+
+Q15. Did you ask your father ________ some money?
+A. 0
+B. after
+C. on
+D. for !Correct
+
+Q16. You look ________ in red!
+A. most nicely
+B. too nice
+C. nicely
+D. very nice !Correct
+
+Q17. We know their address, but they don’t know ________.
+A. ours !Correct
+B. their’s
+C. our’s
+D. our
+
+Q18. Can you use ________ computer?
+A. a !Correct
+B. one
+C. two
+D. an
