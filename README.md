@@ -34,6 +34,8 @@ C. going to buy
 D. bought
 ```
 
+[Clip demo](https://recordit.co/yl5b75lq8U)
+
 ## Installation
 
 Install the latest release yourself as:
