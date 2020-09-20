@@ -27,7 +27,8 @@ module QuickExam
       @object = QuickExam::Record.new()
 
       doc = File.open(@file_path) { |f| Nokogiri::HTML(f) }
-      data = doc.search('.WordSection1 .MsoNormal')
+      data = doc.search('.WordSection1 p')
+
       @total_line = data.size
       data.each_with_index do |element, idx|
         content_html = Sanitize.fragment(element, elements: ALLOWED_ELEMENTS).gsub(regex_ele_empty, '').__squish

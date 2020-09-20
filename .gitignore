@@ -8,6 +8,8 @@
 /pkg/
 /spec/reports/
 /tmp/
-*.gem
 Gemfile.lock
+*.gem
 */quick_exam_export/
+*.fld
+~*_sample.*
