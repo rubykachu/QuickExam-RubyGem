@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'You can shuffle or randomize quiz questions and answers.'
   spec.description   = 'You can shuffle or randomize quiz questions and answers. Shuffling is also an effective way of preventing cheating because no two learners get questions in the same order while taking the same quiz.'
-  spec.homepage      = 'https://github.com/tm-minhtang/quick_exam.git'
+  spec.homepage      = 'https://github.com/rubykachu/quick_exam'
   spec.license       = 'MIT'
   spec.post_install_message = <<EOF
 .-------------------.
@@ -32,13 +32,13 @@ EOF
 
   spec.metadata["allowed_push_host"] = 'https://rubygems.org/'
   spec.metadata['homepage_uri']      = spec.homepage
-  spec.metadata['source_code_uri']   = 'https://github.com/tm-minhtang/quick_exam/tree/master'
-  spec.metadata['changelog_uri']     = 'https://github.com/tm-minhtang/quick_exam/tree/master/CHANGELOG.md'
-  spec.metadata['documentation_uri'] = 'https://github.com/tm-minhtang/quick_exam/tree/master/README.md'
-  spec.metadata['bug_tracker_uri']   = 'https://github.com/tm-minhtang/quick_exam/issues'
+  spec.metadata['source_code_uri']   = 'https://github.com/rubykachu/quick_exam/tree/master'
+  spec.metadata['changelog_uri']     = 'https://github.com/rubykachu/quick_exam/tree/master/CHANGELOG.md'
+  spec.metadata['documentation_uri'] = 'https://github.com/rubykachu/quick_exam/tree/master/README.md'
+  spec.metadata['bug_tracker_uri']   = 'https://github.com/rubykachu/quick_exam/issues'
 
   # Specify which files should be added to the gem when it is released.
-  except_files = %w(Rakefile quick_sample.txt).join(' ')
+  except_files = %w(Rakefile sample).join(' ')
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

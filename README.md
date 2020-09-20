@@ -4,44 +4,35 @@
 
 You can shuffle or randomize quiz questions and answers. Shuffling is also an effective way of preventing cheating because no two learners get questions in the same order while taking the same quiz.
 
-Currently, the gem `quick_exam` **only supports txt** format. With the following rules:
+The gem `quick_exam` **only supports txt, docx and Webpage html from Word** format. You can completely change the format of the questions and answers.
+
 
 | Description | Example |
 |-------------|------------------------|
-| Format for a question. Not case sensitive and can custom format | `Q1.` or `Q1)` or `Q1/` |
-| Format for an answer. Not case sensitive | `A.` or `A)` or `A/` |
-| Format for an answer correct. Not case sensitive and can custom format | `!!!Correct` |
-
-In the future, I will analyze the file in _.docx_ or _.doc_ format
+| Format for a Question: Not case sensitive. The starting must be letters | `Q`, `Question` or `Câu` etc... |
+| Format for an Answer: Not case sensitive. Starting with a letter or a number | `A`, `a` or `1`, `2` etc... |
+| Format for an Correct answer: Not case sensitive | `!!!T` |
 
 **Sample data**
 ```
-  Q1. How do you run migration?
-  (Select multi choices)
+Q1. Who are all ________ people?
+A. this
+B. those !!!T
+C. them
+D. that
 
-  a) rails db:migrate !!!True
-  b/ rake db:migrate !!!True
-  c. rake db:migration
-  d. rails db:migration
+Q2. Claude is ________.
+A. Frenchman
+B. a French !!!T
+C. a Frenchman
+D. French man
 
-
-  Q20) How to access console log screen in rails?
-
-  (Select multi choices)
-
-  A) rails console !!!True
-  B/ rake c !!!True
-  C. rake console --sandbox !!!True
-  D. rails c --sandbox !!!True
-
-  Q333/ What is the purpose of using div tags in HTML?
-
-  1) For creating different styles.
-  2. For creating different sections. !!!True
-  3/ For adding headings.
-  D. For adding titles.
+Q3. I ____ a car next year.
+A. buy
+B. am buying !!!T
+C. going to buy
+D. bought
 ```
-
 
 ## Installation
 
@@ -65,20 +56,7 @@ $ bundle install
 
 ## Usage
 
-### From CLI
-
-Export shuffle or randomize quiz question and answers
-
-```bash
-$ quick_exam export path_file \
-                    --shuffle-question=true \ # alias: -q
-                    --shuffle-answers=true \  # alias: -a
-                    --same-answer=false \     # alias: -s
-                    --count=4 \               # alias: -c
-                    --f-ques="Question" \     # alias: -Q
-                    --f-corr="!!!Right" \     # alias: -C
-                    --dest="./folder"         # alias: -d
-```
+### From CLI to export shuffle or randomize quiz question and answers
 
 Run command help
 
@@ -115,20 +93,21 @@ Options:
 shuffled questions and answers then export file
 ```
 
-### From script ruby
+### From script ruby to process raw data and get results after analysis
 
-To process raw data and get results after analysis
 
 ```ruby
-analyzer = QuickExam::Analyzer.run(path_file)
+analyzer = QuickExam::Analyzer.new(path_file, f_ques: '', f_corr: '')
+analyzer.analyze
 ```
 
 The object `analyzer` will have methods:
 
 ```bash
-.file          # Return the file
-.total_line    # Return total line of the file
 .records       # Return the data after analyzing
+.total_line    # Return total line of the file
+.f_ques        # Return the format question
+.f_corr        # Return the format correct answer
 ```
 
 To shuffle quiz question and answers
@@ -140,11 +119,23 @@ analyzer.records.mixes(count, shuffle_question: true, shuffle_answer: false, sam
 The method `mixes` have 3 arguments:
 
 ```bash
-count:               # Number of copies to created
-shuffle_question:    # Shuffle quiz question. Default: true
-shuffle_answer:      # Shuffle answer. Default: false
-same_answer:         # Same answer for all questionnaires. Default: false
+count:               # Require. Number of copies to created
+shuffle_question:    # Optional. Shuffle quiz question. Default: true
+shuffle_answer:      # Optional. Shuffle answer. Default: false
+same_answer:         # Optional. Same answer for all questionnaires. Default: false
 ```
+
+## Trick: Keep format Word
+
+_Commonly used for mathematical or chemical formats_
+
+`From Word > Save As > Save with format Webpage html`
+
+**Step 1:**
+![image](https://user-images.githubusercontent.com/26104119/93707761-8a5a7080-fb5b-11ea-9df5-ca34a603ab4b.png)
+
+**Step 2:**
+![image](https://user-images.githubusercontent.com/26104119/93707825-e1f8dc00-fb5b-11ea-8518-af07415ba4f3.png)
 
 ## Development
 
